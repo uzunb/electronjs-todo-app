@@ -1,0 +1,28 @@
+{
+  "name": "electron-todo-app",
+  "version": "1.0.0",
+  "description": "This project is demo for JavaScript ElectronJs framework",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uzunb/electronjs-todo-app.git"
+  },
+  "keywords": [
+    "electron",
+    "todo",
+    "desktop",
+    "app"
+  ],
+  "author": "uzunb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uzunb/electronjs-todo-app/issues"
+  },
+  "homepage": "https://github.com/uzunb/electronjs-todo-app#readme",
+  "dependencies": {
+    "electron": "^17.2.0"
+  }
+}
