@@ -1,0 +1,12 @@
+OpenSeadragon({
+    tileSources: [{
+        overlays: [{
+            id: 'example-overlay',
+            x: 0.33,
+            y: 0.75,
+            width: 0.2,
+            height: 0.25,
+            className: 'highlight'
+        }],
+    }]
+});
