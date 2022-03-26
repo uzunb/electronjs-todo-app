@@ -14,6 +14,10 @@ app.on('ready', function(){
         slashes: true
     }));
 
+    mainWindow.on('close', function(){
+        app.quit();
+    });
+
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     Menu.setApplicationMenu(mainMenu);
 
@@ -22,8 +26,8 @@ app.on('ready', function(){
 // Handle create add task window
 function createAddTaskWindow(){
     addTaskWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
+        width: 200,
+        height: 110,
         title: 'Add Task'
     });
 
@@ -33,9 +37,11 @@ function createAddTaskWindow(){
         slashes: true
     }));
 
+    // Garbage collection handle
     addTaskWindow.on('close', function(){
         addTaskWindow = null;
     });
+
 }
 
 
@@ -62,3 +68,27 @@ const mainMenuTemplate = [
         ]
     }
 ];
+
+// If mac, add empty object to menu
+if(process.platform == 'darwin'){
+    mainMenuTemplate.unshift({});
+}
+
+// Add developer tools if not in production
+if(process.env.NODE_ENV !== 'production'){
+    mainMenuTemplate.push({
+        label: 'Developer Tools',
+        submenu: [
+            {
+                label: 'Toggle DevTools',
+                accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
+                click(item, focusedWindow){
+                    focusedWindow.toggleDevTools();
+                }
+            },
+            {
+                role: 'reload'
+            }
+        ]
+    });
+}
