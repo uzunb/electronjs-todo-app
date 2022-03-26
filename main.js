@@ -2,11 +2,11 @@ const electon = require('electron');
 const url = require('url');
 const path = require('path');
 
-const {app, BrowserWindow, Menu} = electon;
+const { app, BrowserWindow, Menu, ipcMain } = electon;
 
 let mainWindow;
 
-app.on('ready', function(){
+app.on('ready', function () {
     mainWindow = new BrowserWindow({});
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'main.html'),
@@ -14,7 +14,7 @@ app.on('ready', function(){
         slashes: true
     }));
 
-    mainWindow.on('close', function(){
+    mainWindow.on('close', function () {
         app.quit();
     });
 
@@ -24,7 +24,7 @@ app.on('ready', function(){
 });
 
 // Handle create add task window
-function createAddTaskWindow(){
+function createAddTaskWindow() {
     addTaskWindow = new BrowserWindow({
         width: 200,
         height: 110,
@@ -38,20 +38,27 @@ function createAddTaskWindow(){
     }));
 
     // Garbage collection handle
-    addTaskWindow.on('close', function(){
+    addTaskWindow.on('close', function () {
         addTaskWindow = null;
     });
 
 }
 
+// Catch item:add
+ipcMain.on('item:add', function (e, item) {
+    console.log(item);
+    mainWindow.webContents.send('item:add', item);
+    addTaskWindow.close();
+});
 
+// Create add task window template
 const mainMenuTemplate = [
     {
         label: 'File',
         submenu: [
             {
                 label: 'Add Item',
-                click(){
+                click() {
                     createAddTaskWindow();
                 }
             },
@@ -61,28 +68,28 @@ const mainMenuTemplate = [
             {
                 label: 'Quit',
                 accelerator: process.platform == 'darwin' ? 'Command+Q' : 'Ctrl+Q',
-                click(){
+                click() {
                     app.quit();
                 }
-            }                                                                                                                                                             
+            }
         ]
     }
 ];
 
 // If mac, add empty object to menu
-if(process.platform == 'darwin'){
+if (process.platform == 'darwin') {
     mainMenuTemplate.unshift({});
 }
 
 // Add developer tools if not in production
-if(process.env.NODE_ENV !== 'production'){
+if (process.env.NODE_ENV !== 'production') {
     mainMenuTemplate.push({
         label: 'Developer Tools',
         submenu: [
             {
                 label: 'Toggle DevTools',
                 accelerator: process.platform == 'darwin' ? 'Command+I' : 'Ctrl+I',
-                click(item, focusedWindow){
+                click(item, focusedWindow) {
                     focusedWindow.toggleDevTools();
                 }
             },

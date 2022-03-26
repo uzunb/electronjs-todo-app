@@ -12,5 +12,20 @@
             </div>
             <button type="submit" class="btn btn-primary">Add Item</button>
         </form>
+
+        <script>
+            const electron = require('electron');
+            const { ipcRenderer } = electron;
+
+            const form = document.querySelector('form');
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                
+                const task = document.querySelector('#task').value;
+                ipcRenderer.send('item:add', task);
+                
+                console.log('Form submitted');
+            });
+        </script>
     </body>
 </html>
